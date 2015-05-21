@@ -165,7 +165,7 @@ end
 if __FILE__ == $0
 
   # Ensure that we are in a modman module directory
-  directory = Dir.getwd.split('/')
+  directory = ENV['PWD'].split('/')
   unless directory[-2] == '.modman'
     puts "It looks like you aren't in a Modman module directory. Exiting."
     exit 1
