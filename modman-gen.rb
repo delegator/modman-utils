@@ -164,18 +164,27 @@ end
 # Main program begin (only if called directly)
 if __FILE__ == $0
 
-  # Ensure that we are in a modman module directory
-  directory = Dir.getwd.split('/')
-  unless directory[-2] == '.modman'
-    puts "It looks like you aren't in a Modman module directory. Exiting."
-    exit 1
+  directory = Dir.getwd
+
+  if ARGV[0].nil?
+    directory = directory.split('/')
+    # Ensure that we are in a modman module directory
+    unless directory[-2] == '.modman'
+      puts "It looks like you aren't in a Modman module directory."
+      puts "You can specify a target Magento directory on the command line."
+      exit 1
+    end
+
+    # Put together the 'module_directory' and 'target_directory' directories
+    module_directory = directory.join('/') + '/'
+    directory.delete_at(-2)
+    directory.delete_at(-1)
+    target_directory = directory.join('/') + '/'
+  else
+    module_directory = directory + '/'
+    target_directory = ARGV[0]
   end
 
-  # Put together the 'module_directory' and 'target_directory' directories
-  module_directory = directory.join('/') + '/'
-  directory.delete_at(-2)
-  directory.delete_at(-1)
-  target_directory = directory.join('/') + '/'
 
   # Find all directories that exist in the module directory, but not the target directory
   uniq_directories = find_unique_directories(module_directory, target_directory)
